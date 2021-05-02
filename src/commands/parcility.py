@@ -51,13 +51,20 @@ class TweakMenu(menus.AsyncIteratorPageSource):
         
     async def format_page(self, menu, entry):
         entry = await package_request(entry)
-        async with aiohttp.ClientSession() as client:
-            async with client.get(URL(entry.get('Icon'))) as img:
-                image_bytes = buffer = io.BytesIO(await img.read())
-                cf = ColorThief(image_bytes)
-                dc = cf.get_color(quality=1)
-                rgb = dc
-                color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16)
+        pattern = re.compile(r"((http|https)\:\/\/)[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
+        if (pattern.match(entry.get('Icon'))):
+            async with aiohttp.ClientSession() as client:
+                async with client.get(URL(entry.get('Icon'))) as img:
+                    if img.status == 200:
+                        image_bytes = buffer = io.BytesIO(await img.read())
+                        cf = ColorThief(image_bytes)
+                        dc = cf.get_color(quality=1)
+                        rgb = dc
+                        color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16)
+                    else:
+                        color = discord.Color.blue()
+        else:
+            color = discord.Color.blue()
         embed = discord.Embed(title=entry.get('Name'), color=color)
         embed.description = discord.utils.escape_markdown(entry.get('Description'))
         embed.add_field(name="Author", value= discord.utils.escape_markdown(entry.get('Author') or "No author"), inline=True)
@@ -66,7 +73,6 @@ class TweakMenu(menus.AsyncIteratorPageSource):
         embed.add_field(name="Repo", value=f"[{entry.get('repo').get('label')}]({entry.get('repo').get('url')})" or "No repo", inline=False)
         embed.add_field(name="Add Repo", value=f"[Click Here](https://cydia.saurik.com/api/share#?source={entry.get('repo').get('url')})" or "No repo", inline=True)
         embed.add_field(name="More Info", value=f"[View on Parcility](https://parcility.co/package/{entry.get('Package')}/{entry.get('repo').get('slug')})", inline=True)
-        pattern = re.compile(r"((http|https)\:\/\/)[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
         if (pattern.match(entry.get('Icon'))):
             embed.set_thumbnail(url=entry.get('Icon'))
         embed.set_footer(icon_url=entry.get('repo').get('icon'), text=discord.utils.escape_markdown(entry.get('Package'))+f" • Page {menu.current_page +1}/{self.page_length}" or "No package")
@@ -145,6 +151,7 @@ class Parcility(commands.Cog):
     @commands.guild_only()
     async def repo(self, ctx, *, query):
         data = await self.repo_request(query)
+        pattern = re.compile(r"((http|https)\:\/\/)[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
 
         if data is None:
             embed = discord.Embed(title="Error", color=discord.Color.red())
@@ -158,14 +165,20 @@ class Parcility(commands.Cog):
             await ctx.message.delete(delay=15)
             await ctx.send(embed=embed, delete_after=15)
             return
-        
-        async with aiohttp.ClientSession() as client:
-            async with client.get(URL(data.get('Icon'))) as img:
-                image_bytes = buffer = io.BytesIO(await img.read())
-                cf = ColorThief(image_bytes)
-                dc = cf.get_color(quality=1)
-                rgb = dc
-                color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16)
+
+        if (pattern.match(data.get('Icon'))):
+            async with aiohttp.ClientSession() as client:
+                async with client.get(URL(data.get('Icon'))) as img:
+                    if img.status == 200:
+                        image_bytes = buffer = io.BytesIO(await img.read())
+                        cf = ColorThief(image_bytes)
+                        dc = cf.get_color(quality=1)
+                        rgb = dc
+                        color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16)
+                    else:
+                        color = discord.Color.blue()
+        else:
+            color = discord.Color.blue()
         embed = discord.Embed(title=data.get('Label'), color=color)
         embed.description = data.get('Description')
         embed.add_field(name="Packages", value=data.get('package_count'), inline=True)
@@ -173,7 +186,8 @@ class Parcility(commands.Cog):
         embed.add_field(name="URL", value=data.get('repo'), inline=False)
         embed.add_field(name="Add Repo", value=f'[Click Here](https://cydia.saurik.com/api/share#?source={data.get("repo")})', inline=True)
         embed.add_field(name="More Info", value=f'[View on Parcility](https://parcility.co/{data.get("repo")})', inline=True)
-        embed.set_thumbnail(url=data.get('Icon'))
+        if (pattern.match(data.get('Icon'))):
+            embed.set_thumbnail(url=data.get('Icon'))
         embed.set_footer(text=data.get('Version'))
         embed.timestamp = datetime.now()
 
