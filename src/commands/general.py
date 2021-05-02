@@ -8,10 +8,6 @@ from colorthief import ColorThief
 
 start_time = datetime.datetime.utcnow()
 
-#class AppURLopener(urllib.request.FancyURLopener):
-#    version = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.69 Safari/537.36"
-#urllib._urlopener = AppURLopener()
-
 class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
