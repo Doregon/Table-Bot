@@ -72,8 +72,9 @@ class General(commands.Cog):
         else:
             roles = "No roles."
             joined = f"User not in {ctx.guild.name}."
+        
         async with aiohttp.ClientSession() as client:
-            async with client.get(URL(str('https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=1024"'.format(user)))) as img:
+            async with client.get(URL(str(user.avatar_url))) as img:
                 image_bytes = buffer = io.BytesIO(await img.read())
                 cf = ColorThief(image_bytes)
                 dc = cf.get_color(quality=1)
@@ -83,7 +84,7 @@ class General(commands.Cog):
                 embed.add_field(name="Created On", value=user.created_at.strftime("%B %d, %Y"), inline=True)
                 embed.add_field(name="Joined On", value=user.joined_at.strftime("%B %d, %Y"), inline=True)
                 embed.add_field(name="Roles", value=roles if roles else "None", inline=False)
-                embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=1024".format(user))
+                embed.set_thumbnail(url=user.avatar_url)
                 await ctx.send(embed=embed)
 
     @commands.command(name="ping")
