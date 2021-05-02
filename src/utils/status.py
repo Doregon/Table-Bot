@@ -9,10 +9,10 @@ class Status(commands.Cog):
 
     @tasks.loop(seconds=9000)
     async def status(self):
-        r = requests.get('https://api.parcility.co/db/repo/procursus')
+        r = requests.get('https://api.parcility.co/db/repo/procursus') # Make this async with aiohttp
         pkg = r.json()['data']['package_count']
         sec = r.json()['data']['section_count']
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{pkg} packages, {len(self.bot.guilds)} servers'))
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{pkg} packages, {sec} sections'))
 
     @status.before_loop
     async def before_status(self):

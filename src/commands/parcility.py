@@ -4,10 +4,12 @@ import discord
 import re
 import json
 import aiohttp
+import io
 import urllib
 from datetime import datetime
 from discord.ext import commands, menus
 from yarl import URL
+from colorthief import ColorThief
 
 package_url = 'https://api.parcility.co/db/package/'
 search_url = 'https://api.parcility.co/db/search?q='
@@ -49,7 +51,14 @@ class TweakMenu(menus.AsyncIteratorPageSource):
         
     async def format_page(self, menu, entry):
         entry = await package_request(entry)
-        embed = discord.Embed(title=entry.get('Name'), color=discord.Color.blue())
+        async with aiohttp.ClientSession() as client:
+            async with client.get(URL(entry.get('Icon'))) as img:
+                image_bytes = buffer = io.BytesIO(await img.read())
+                cf = ColorThief(image_bytes)
+                dc = cf.get_color(quality=1)
+                rgb = dc
+                color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16)
+        embed = discord.Embed(title=entry.get('Name'), color=color)
         embed.description = discord.utils.escape_markdown(entry.get('Description'))
         embed.add_field(name="Author", value= discord.utils.escape_markdown(entry.get('Author') or "No author"), inline=True)
         embed.add_field(name="Version", value= discord.utils.escape_markdown(entry.get('Version') or "No version"), inline=True)
@@ -150,7 +159,14 @@ class Parcility(commands.Cog):
             await ctx.send(embed=embed, delete_after=15)
             return
         
-        embed = discord.Embed(title=data.get('Label'), color=discord.Color.blue())
+        async with aiohttp.ClientSession() as client:
+            async with client.get(URL(data.get('Icon'))) as img:
+                image_bytes = buffer = io.BytesIO(await img.read())
+                cf = ColorThief(image_bytes)
+                dc = cf.get_color(quality=1)
+                rgb = dc
+                color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16)
+        embed = discord.Embed(title=data.get('Label'), color=color)
         embed.description = data.get('Description')
         embed.add_field(name="Packages", value=data.get('package_count'), inline=True)
         embed.add_field(name="Sections", value=data.get('section_count'), inline=True)
