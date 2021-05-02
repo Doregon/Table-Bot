@@ -56,7 +56,7 @@ class General(commands.Cog):
                     dc = cf.get_color(quality=1)
                     rgb = dc
                     color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
-                    embed = discord.Embed(color=color)
+                    embed = discord.Embed(title=emoji.name, color=color)
                     embed.set_image(url=emoji.url)
                     await ctx.send(embed=embed)
 
