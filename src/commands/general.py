@@ -51,7 +51,7 @@ class General(commands.Cog):
         else:
             async with aiohttp.ClientSession() as client:
                 async with client.get(URL(str(emoji.url))) as img:
-                    image_bytes = buffer = io.BytesIO(await img.read())
+                    image_bytes = io.BytesIO(await img.read())
                     cf = ColorThief(image_bytes)
                     dc = cf.get_color(quality=1)
                     rgb = dc
@@ -75,12 +75,12 @@ class General(commands.Cog):
         
         async with aiohttp.ClientSession() as client:
             async with client.get(URL(str(user.avatar_url))) as img:
-                image_bytes = buffer = io.BytesIO(await img.read())
+                image_bytes = io.BytesIO(await img.read())
                 cf = ColorThief(image_bytes)
                 dc = cf.get_color(quality=1)
                 rgb = dc
                 color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
-                embed=discord.Embed(title="User Info", description=f"<@{user.id}> ({user.id})", color=color)
+                embed=discord.Embed(title="User Info", description=f"{user.mention} ({user.id})", color=color)
                 embed.add_field(name="Created On", value=user.created_at.strftime("%B %d, %Y"), inline=True)
                 embed.add_field(name="Joined On", value=user.joined_at.strftime("%B %d, %Y"), inline=True)
                 embed.add_field(name="Roles", value=roles if roles else "None", inline=False)

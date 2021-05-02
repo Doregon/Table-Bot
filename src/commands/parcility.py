@@ -56,7 +56,7 @@ class TweakMenu(menus.AsyncIteratorPageSource):
             async with aiohttp.ClientSession() as client:
                 async with client.get(URL(entry.get('Icon'))) as img:
                     if img.status == 200:
-                        image_bytes = buffer = io.BytesIO(await img.read())
+                        image_bytes = io.BytesIO(await img.read())
                         cf = ColorThief(image_bytes)
                         dc = cf.get_color(quality=1)
                         rgb = dc
@@ -171,7 +171,7 @@ class Parcility(commands.Cog):
             async with aiohttp.ClientSession() as client:
                 async with client.get(URL(data.get('Icon'))) as img:
                     if img.status == 200:
-                        image_bytes = buffer = io.BytesIO(await img.read())
+                        image_bytes = io.BytesIO(await img.read())
                         cf = ColorThief(image_bytes)
                         dc = cf.get_color(quality=1)
                         rgb = dc
