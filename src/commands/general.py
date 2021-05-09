@@ -17,8 +17,8 @@ class General(commands.Cog):
     async def help(self, ctx):
         embed=discord.Embed(title="Help", color=discord.Color.green())
         embed.add_field(name="Parcility", value="`!package`\n`!repo`", inline=True)
-        embed.add_field(name="General", value="`!jumbo`\n`!userinfo`\n`!ping`", inline=True)
-        embed.add_field(name="Moderation", value="`!kick`\n`!ban`\n`!unban`", inline=True)
+        embed.add_field(name="General", value="`!jumbo`\n`!userinfo`\n`!pfp`\n`!ping`", inline=True)
+        embed.add_field(name="Moderation", value="`!purge`\n`!kick`\n`!ban`\n`!unban`", inline=True)
         embed.add_field(name="GitHub", value='https://github.com/xstecky/Table-Bot', inline=False)
         embed.add_field(name="Discord", value='https://diatr.us/discord', inline=False)
 
