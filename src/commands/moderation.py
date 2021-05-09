@@ -7,6 +7,15 @@ class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command(name="clean", aliases=['purge', 'nuke'])
+    @commands.guild_only()
+    async def clean(self, ctx, limit: int):
+        msg = 'message'
+        await ctx.channel.purge(limit=limit+1)
+        embed = discord.Embed(title="Success", color=discord.Color.green())
+        embed.description = f'Deleted {limit} {msg if limit == 1 else "messages"}.'
+        await ctx.send(embed=embed, delete_after=15)
+
     @commands.command(name="ban")
     @commands.guild_only()
     @commands.has_permissions(ban_members=True) 

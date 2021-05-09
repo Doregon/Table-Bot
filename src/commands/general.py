@@ -56,6 +56,22 @@ class General(commands.Cog):
                     embed.set_image(url=emoji.url)
                     await ctx.send(embed=embed)
 
+    @commands.command(name='avatar', aliases=['pfp'])
+    @commands.guild_only()
+    async def avatar(self, ctx, user: discord.Member = None):
+        user = user or ctx.author
+        async with aiohttp.ClientSession() as client:
+            async with client.get(URL(str("https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=16".format(user)))) as img:
+                image_bytes = io.BytesIO(await img.read())
+                cf = ColorThief(image_bytes)
+                dc = cf.get_color(quality=1)
+                rgb = dc
+                color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
+                embed = discord.Embed(title=user.display_name, color=color)
+                embed.add_field(name="View as", value=f'[png]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=1024)".format(user)} [jpg]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.jpg?size=1024)".format(user)} [webp]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.webp?size=1024)".format(user)}', inline=False)
+                embed.set_image(url=user.avatar_url)
+                await ctx.send(embed=embed)
+
     @commands.command(name="info", aliases=['userinfo', 'ui'])
     @commands.guild_only()
     async def info(self, ctx, user: discord.Member = None):
@@ -70,7 +86,7 @@ class General(commands.Cog):
             joined = f"User not in {ctx.guild.name}."
         
         async with aiohttp.ClientSession() as client:
-            async with client.get(URL(str(user.avatar_url))) as img:
+            async with client.get(URL(str("https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=16".format(user)))) as img:
                 image_bytes = io.BytesIO(await img.read())
                 cf = ColorThief(image_bytes)
                 dc = cf.get_color(quality=1)
