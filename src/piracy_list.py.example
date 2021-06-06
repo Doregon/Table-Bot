@@ -1,0 +1,5 @@
+repos = [
+    'badrepo1.com',
+    'badrepo2.com',
+    'badrepo3.com'
+]

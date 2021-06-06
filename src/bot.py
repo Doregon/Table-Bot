@@ -37,7 +37,8 @@ def get_prefix(bot, message):
 initial_extensions = ['commands.parcility',
                       'commands.general',
                       'commands.moderation',
-                      'utils.status']
+                      'utils.status',
+                      'utils.piracy']
 
 bot = commands.Bot(command_prefix=get_prefix, help_command=None, allowed_mentions=discord.AllowedMentions(roles=False, users=False, everyone=False))
 
