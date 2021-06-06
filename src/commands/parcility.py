@@ -76,6 +76,15 @@ class TweakMenu(menus.AsyncIteratorPageSource):
         embed.add_field(name="More Info", value=f"[View on Parcility](https://parcility.co/package/{entry.get('Package')}/{entry.get('repo').get('slug')})", inline=True)
         if (pattern.match(entry.get('Icon'))):
             embed.set_thumbnail(url=entry.get('Icon'))
+
+        async with aiohttp.ClientSession() as client:
+            async with client.get(URL(f'https://api.parcility.co/db/package/{entry.get("Package")}/sileo', encoded=True)) as resp:
+                if resp.status == 200 :
+                    response = json.loads(await resp.text())
+                    if response.get('status') == True:
+                        if 'headerImage' in response.get('data'):
+                            embed.set_image(url=response.get('data')['headerImage'])
+
         embed.set_footer(text=discord.utils.escape_markdown(entry.get('Package'))+f" • Page {menu.current_page +1}/{self.page_length}" or "No package")
         embed.timestamp = datetime.now()
         return embed
