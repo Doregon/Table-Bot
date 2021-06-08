@@ -83,7 +83,8 @@ class TweakMenu(menus.AsyncIteratorPageSource):
                     response = json.loads(await resp.text())
                     if response.get('status') == True:
                         if 'headerImage' in response.get('data'):
-                            embed.set_image(url=response.get('data')['headerImage'])
+                            if response.get('data')['headerImage'] != 'https://repo.dynastic.co/assets/img/default-sileo-banner.png':
+                                embed.set_image(url=response.get('data')['headerImage'])
 
         embed.set_footer(text=discord.utils.escape_markdown(entry.get('Package'))+f" • Page {menu.current_page +1}/{self.page_length}" or "No package")
         embed.timestamp = datetime.now()
