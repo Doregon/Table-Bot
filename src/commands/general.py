@@ -1,6 +1,6 @@
 import traceback
 
-import discord, datetime
+import discord, datetime, json
 from discord.ext import commands
 import aiohttp, io
 from yarl import URL
@@ -17,7 +17,7 @@ class General(commands.Cog):
     async def help(self, ctx):
         embed=discord.Embed(title="Help", color=discord.Color.green())
         embed.add_field(name="Parcility", value="`!package`\n`!repo`", inline=True)
-        embed.add_field(name="General", value="`!jumbo`\n`!userinfo`\n`!pfp`\n`!ping`", inline=True)
+        embed.add_field(name="General", value="`!jumbo`\n`!userinfo`\n`!pfp`\n`!ping`\n`!catgirl`\n`!catboy`", inline=True)
         embed.add_field(name="Moderation", value="`!purge`\n`!kick`\n`!ban`\n`!unban`", inline=True)
         embed.add_field(name="GitHub", value='https://github.com/xstecky/Table-Bot', inline=False)
         embed.add_field(name="Discord", value='https://diatr.us/discord', inline=False)
@@ -109,6 +109,24 @@ class General(commands.Cog):
             embed = discord.Embed(title="Pong!", color=discord.Color.green())
         embed.description = f'Latency is {lag} ms.'
         await ctx.send(embed=embed)
+
+    @commands.command(name="catgirl")
+    @commands.guild_only()
+    async def catgirl(self, ctx):
+        async with aiohttp.ClientSession() as client:
+            async with client.get(URL('https://nekos.life/api/v2/img/neko', encoded=True)) as resp:
+                if resp.status == 200:
+                    response = json.loads(await resp.text())
+                    await ctx.send(response.get('url'))
+
+    @commands.command(name="catboy")
+    @commands.guild_only()
+    async def catboy(self, ctx):
+        async with aiohttp.ClientSession() as client:
+            async with client.get(URL('https://api.catboys.com/img', encoded=True)) as resp:
+                if resp.status == 200:
+                    response = json.loads(await resp.text())
+                    await ctx.send(response.get('url'))
 
 
 def setup(bot):
