@@ -72,7 +72,7 @@ class TweakMenu(menus.AsyncIteratorPageSource):
         embed.add_field(name="Price", value=entry.get("Price") or "Free")
         embed.add_field(name="Repo", value=f"[{entry.get('repo').get('label')}]({entry.get('repo').get('url')})" or "No repo", inline=True)
         if entry.get('repo').get('isDefault') == False:
-            embed.add_field(name="Add Repo", value=f"[Click Here](https://toiletc.at/reporesolver/?repo={entry.get('repo').get('url')})" or "No repo", inline=True)
+            embed.add_field(name="Add Repo", value=f"[Click Here](https://stkc.win/addrepo/?repo={entry.get('repo').get('url')})" or "No repo", inline=True)
         embed.add_field(name="More Info", value=f"[View on Parcility](https://parcility.co/package/{entry.get('Package')}/{entry.get('repo').get('slug')})", inline=False)
         if (pattern.match(entry.get('Icon'))):
             embed.set_thumbnail(url=entry.get('Icon'))
@@ -196,7 +196,7 @@ class Parcility(commands.Cog):
         embed.add_field(name="Sections", value=data.get('section_count'), inline=True)
         embed.add_field(name="URL", value=data.get('repo'), inline=False)
         if data.get('isDefault') == False:
-            embed.add_field(name="Add Repo", value=f'[Click Here](https://toiletc.at/reporesolver/?repo={data.get("repo")})', inline=True)
+            embed.add_field(name="Add Repo", value=f'[Click Here](https://stkc.win/addrepo/?repo={data.get("repo")})', inline=True)
         embed.add_field(name="More Info", value=f'[View on Parcility](https://parcility.co/{data.get("repo")})', inline=True)
         if (pattern.match(data.get('Icon'))):
             embed.set_thumbnail(url=data.get('Icon'))
