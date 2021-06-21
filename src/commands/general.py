@@ -1,6 +1,6 @@
 import traceback
 
-import discord, datetime, json
+import discord, datetime, json, os, random
 from discord.ext import commands
 import aiohttp, io
 from yarl import URL
@@ -128,6 +128,10 @@ class General(commands.Cog):
                     response = json.loads(await resp.text())
                     await ctx.send(response.get('url'))
 
+    @commands.command(name="cat", aliases=['peepee'])
+    @commands.guild_only()
+    async def cat(self, ctx):
+        await ctx.send(file=discord.File('./assets/peepee/'+random.choice(os.listdir("./assets/peepee"))))
 
 def setup(bot):
     bot.add_cog(General(bot))
