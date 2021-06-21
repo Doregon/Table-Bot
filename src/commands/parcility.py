@@ -192,7 +192,7 @@ class Parcility(commands.Cog):
         embed.description = data.get('Description')
         embed.add_field(name="Packages", value=data.get('package_count'), inline=True)
         embed.add_field(name="Sections", value=data.get('section_count'), inline=True)
-        embed.add_field(name="URL", value=data.get('repo'), inline=False)
+        embed.add_field(name="URL", value=data.get('url'), inline=False)
         if data.get('isDefault') == False:
             embed.add_field(name="Add Repo", value=f'[Click Here](https://stkc.win/addrepo/?repo={data.get("url")})', inline=True)
         embed.add_field(name="More Info", value=f'[View on Parcility](https://parcility.co/{data.get("id")})', inline=True)
