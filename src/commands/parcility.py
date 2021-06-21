@@ -76,7 +76,6 @@ class TweakMenu(menus.AsyncIteratorPageSource):
         embed.add_field(name="More Info", value=f"[View on Parcility](https://parcility.co/package/{entry.get('Package')}/{entry.get('repo').get('slug')})", inline=False)
         if (pattern.match(entry.get('Icon'))):
             embed.set_thumbnail(url=entry.get('Icon'))
-
         async with aiohttp.ClientSession() as client:
             async with client.get(URL(f'https://api.parcility.co/db/package/{entry.get("Package")}/sileo', encoded=True)) as resp:
                 if resp.status == 200 :
@@ -85,7 +84,6 @@ class TweakMenu(menus.AsyncIteratorPageSource):
                         if 'headerImage' in response.get('data'):
                             if response.get('data')['headerImage'] != 'https://repo.dynastic.co/assets/img/default-sileo-banner.png':
                                 embed.set_image(url=response.get('data')['headerImage'])
-
         embed.set_footer(text=discord.utils.escape_markdown(entry.get('Package'))+f" • Page {menu.current_page +1}/{self.page_length}" or "No package")
         embed.timestamp = datetime.now()
         return embed
@@ -196,8 +194,8 @@ class Parcility(commands.Cog):
         embed.add_field(name="Sections", value=data.get('section_count'), inline=True)
         embed.add_field(name="URL", value=data.get('repo'), inline=False)
         if data.get('isDefault') == False:
-            embed.add_field(name="Add Repo", value=f'[Click Here](https://stkc.win/addrepo/?repo={data.get("repo")})', inline=True)
-        embed.add_field(name="More Info", value=f'[View on Parcility](https://parcility.co/{data.get("repo")})', inline=True)
+            embed.add_field(name="Add Repo", value=f'[Click Here](https://stkc.win/addrepo/?repo={data.get("url")})', inline=True)
+        embed.add_field(name="More Info", value=f'[View on Parcility](https://parcility.co/{data.get("id")})', inline=True)
         if (pattern.match(data.get('Icon'))):
             embed.set_thumbnail(url=data.get('Icon'))
         if data.get('isDefault') == True:
