@@ -118,7 +118,17 @@ class General(commands.Cog):
             async with client.get(URL('https://nekos.life/api/v2/img/neko', encoded=True)) as resp:
                 if resp.status == 200:
                     response = json.loads(await resp.text())
-                    await ctx.send(response.get('url'))
+                    image = response.get('url')
+                    async with aiohttp.ClientSession() as client:
+                        async with client.get(URL(str(image))) as img:
+                            image_bytes = io.BytesIO(await img.read())
+                            cf = ColorThief(image_bytes)
+                            dc = cf.get_color(quality=1)
+                            rgb = dc
+                            color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
+                            embed = discord.Embed(color=color)
+                            embed.set_image(url=image)
+                            await ctx.send(embed=embed)
 
     @commands.command(name="catboy")
     @commands.guild_only()
@@ -127,12 +137,32 @@ class General(commands.Cog):
             async with client.get(URL('https://api.catboys.com/img', encoded=True)) as resp:
                 if resp.status == 200:
                     response = json.loads(await resp.text())
-                    await ctx.send(response.get('url'))
+                    image = response.get('url')
+                    async with aiohttp.ClientSession() as client:
+                        async with client.get(URL(str(image))) as img:
+                            image_bytes = io.BytesIO(await img.read())
+                            cf = ColorThief(image_bytes)
+                            dc = cf.get_color(quality=1)
+                            rgb = dc
+                            color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
+                            embed = discord.Embed(color=color)
+                            embed.set_image(url=image)
+                            await ctx.send(embed=embed)
 
     @commands.command(name="cat", aliases=['peepee'])
     @commands.guild_only()
     async def cat(self, ctx):
-        await ctx.send(f'https://assets.stkc.win/botpeepee/{randint(1, 947)}.jpg')
+        photonumber = randint(1, 947)
+        async with aiohttp.ClientSession() as client:
+            async with client.get(URL(str(f"https://assets.stkc.win/botpeepee/{photonumber}.jpg"))) as img:
+                image_bytes = io.BytesIO(await img.read())
+                cf = ColorThief(image_bytes)
+                dc = cf.get_color(quality=1)
+                rgb = dc
+                color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
+                embed = discord.Embed(color=color)
+                embed.set_image(url=f"https://assets.stkc.win/botpeepee/{photonumber}.jpg")
+                await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(General(bot))
