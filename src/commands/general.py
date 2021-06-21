@@ -1,8 +1,9 @@
 import traceback
 
-import discord, datetime, json, os, random
+import discord, datetime, json, random
 from discord.ext import commands
 import aiohttp, io
+from random import randint
 from yarl import URL
 from colorthief import ColorThief
 
@@ -131,7 +132,7 @@ class General(commands.Cog):
     @commands.command(name="cat", aliases=['peepee'])
     @commands.guild_only()
     async def cat(self, ctx):
-        await ctx.send(file=discord.File('./assets/peepee/'+random.choice(os.listdir("./assets/peepee"))))
+        await ctx.send(f'https://assets.stkc.win/botpeepee/{randint(1, 947)}.jpg')
 
 def setup(bot):
     bot.add_cog(General(bot))
