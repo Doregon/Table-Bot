@@ -69,7 +69,10 @@ class General(commands.Cog):
                 rgb = dc
                 color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
                 embed = discord.Embed(title=user.display_name, color=color)
-                embed.add_field(name="View as", value=f'[png]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=1024)".format(user)} [jpg]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.jpg?size=1024)".format(user)} [webp]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.webp?size=1024)".format(user)}', inline=False)
+                if user.is_avatar_animated():
+                    embed.add_field(name="View as", value=f'[gif]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.gif?size=1024)".format(user)} [png]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=1024)".format(user)} [jpg]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.jpg?size=1024)".format(user)} [webp]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.webp?size=1024)".format(user)}', inline=False)
+                else:
+                    embed.add_field(name="View as", value=f'[png]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=1024)".format(user)} [jpg]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.jpg?size=1024)".format(user)} [webp]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.webp?size=1024)".format(user)}', inline=False)
                 embed.set_image(url=user.avatar_url)
                 await ctx.send(embed=embed)
 
