@@ -33,8 +33,8 @@ async def get_pages(query):
         else:
             sha1sum = object['sha1sum']
         embed = discord.Embed(color=color)
-        embed.title = f"{object['version']} `{object['buildid']}`"
         embed.set_author(name=response['name'])
+        embed.title = f"{object['version']} `{object['buildid']}`"
         embed.add_field(name="Released on", value=f"`{releasedate}`", inline=True)
         embed.add_field(name="SHA1", value=f"`{sha1sum}`", inline=True)
         embed.add_field(name="Download", value=f"[{object['url'][:30]}...]({object['url']}) `{size(object['filesize'], system = alternative)}`", inline=False)

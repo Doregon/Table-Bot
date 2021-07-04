@@ -41,7 +41,7 @@ initial_extensions = ['commands.parcility',
                       'utils.status',
                       'utils.piracy']
 
-bot = commands.Bot(command_prefix=get_prefix, help_command=None, allowed_mentions=discord.AllowedMentions(roles=False, users=False, everyone=False))
+bot = commands.Bot(command_prefix=get_prefix, case_insensitive=True, help_command=None, allowed_mentions=discord.AllowedMentions(roles=False, users=False, everyone=False))
 
 # Here we load our extensions(cogs) listed above in [initial_extensions].
 if __name__ == '__main__':
