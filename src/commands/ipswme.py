@@ -38,6 +38,7 @@ async def get_pages(query):
         embed.add_field(name="SHA1", value=f"`{sha1sum}`", inline=True)
         embed.add_field(name="Download", value=f"[{object['url'][:30]}...]({object['url']}) `{size(object['filesize'], system = alternative)}`", inline=False)
         embed.description = signed
+        embed.set_footer(text=object['identifier'])
         pages.append(embed)
     return pages
 
