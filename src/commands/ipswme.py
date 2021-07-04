@@ -48,10 +48,13 @@ class ipswme(commands.Cog):
     @commands.command(name='firmware', aliases=['device'])
     async def firmware(self, ctx, *, query):
         try:
-            paginator = Paginator(pages = await get_pages(query), has_input = False, has_lock = True)
+            paginator = Paginator(pages = await get_pages(query), has_input = False)
             await paginator.start(ctx)
         except UnboundLocalError:
-            await ctx.send(f'Device not found, make sure you\'re using a valid device name or identifier. You can find these on <https://ipsw.me>.')
+            embed = discord.Embed(title="Not Found", color=discord.Color.red())
+            embed.description = f'Sorry, I couldn\'t find a matching device by that name. You can You can find these on <https://ipsw.me>.'
+            await ctx.message.delete(delay=15)
+            await ctx.send(embed=embed, delete_after=15)
 
 def setup(bot):
     bot.add_cog(ipswme(bot))
