@@ -23,7 +23,7 @@ class General(commands.Cog):
         embed.add_field(name="General", value="`!jumbo <emoji: mention>`\n`!userinfo [user: mention/id]`\n`!pfp [user: mention/id]`\n`!ping`\n`!cat`\n`!catgirl`\n`!catboy`", inline=False)
         embed.add_field(name="Moderation", value="`!purge <amount: integer>`\n`!kick <user: mention/id>`\n`!ban <user: mention/id>`\n`!unban <user: id>`", inline=False)
         embed.add_field(name="GitHub", value='https://github.com/xstecky/Table-Bot', inline=True)
-        embed.add_field(name="Invite", value='https://discord.com/api/oauth2/authorize?client_id=795276002552446996&permissions=2080762999&scope=bot%20applications.commands'[:33]+'[](...', inline=True)
+        embed.add_field(name="Invite", value='https://discord.com/api/oauth2/authorize?client_id=795276002552446996&permissions=2080762999&scope=bot%20applications.commands'[:33]', inline=True)
         embed.add_field(name="Discord", value='https://diatr.us/discord', inline=False)
 
         now = datetime.datetime.utcnow() # Timestamp of when uptime function is run
