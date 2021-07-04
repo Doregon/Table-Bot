@@ -16,6 +16,7 @@ class General(commands.Cog):
     @commands.command(name="help")
     @commands.guild_only()
     async def help(self, ctx):
+        dm = ctx.author
         embed=discord.Embed(title="Help", color=discord.Color.green())
         embed.add_field(name="Parcility", value="`!package <query: package name>`\n`!repo <query: repo name>`", inline=False)
         embed.add_field(name="IPSW Downloads", value="`!firmware <device: identifier/name>`", inline=False)
@@ -37,7 +38,11 @@ class General(commands.Cog):
         uptime_stamp = time_format.format(d=days, h=hours, m=minutes, s=seconds)
 
         embed.set_footer(text=f'Online for {uptime_stamp}')
-        await ctx.send(embed=embed)
+        try:
+            await dm.send(embed=embed)
+            await ctx.send('📬')
+        except:
+            await ctx.send(embed=embed)
 
     @commands.command(name='jumbo', aliases=['e','enlarge','emoji'])
     @commands.guild_only()
