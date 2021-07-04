@@ -5,7 +5,7 @@ from discord.ext import commands
 import aiohttp, io
 from random import randint
 from yarl import URL
-from colorthief import ColorThief
+import fast_colorthief
 
 start_time = datetime.datetime.utcnow()
 
@@ -55,9 +55,7 @@ class General(commands.Cog):
             async with aiohttp.ClientSession() as client:
                 async with client.get(URL(str(emoji.url))) as img:
                     image_bytes = io.BytesIO(await img.read())
-                    cf = ColorThief(image_bytes)
-                    dc = cf.get_color(quality=1)
-                    rgb = dc
+                    rgb = fast_colorthief.get_dominant_color(image_bytes, quality=1)
                     color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
                     embed = discord.Embed(title=emoji.name, color=color)
                     embed.set_image(url=emoji.url)
@@ -70,10 +68,8 @@ class General(commands.Cog):
         async with aiohttp.ClientSession() as client:
             async with client.get(URL(str("https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=16".format(user)))) as img:
                 image_bytes = io.BytesIO(await img.read())
-                cf = ColorThief(image_bytes)
-                dc = cf.get_color(quality=1)
-                rgb = dc
-                color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
+                rgb = fast_colorthief.get_dominant_color(image_bytes, quality=1)
+                color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16)
                 embed = discord.Embed(title=user.display_name, color=color)
                 if user.is_avatar_animated():
                     embed.add_field(name="View as", value=f'[gif]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.gif?size=1024)".format(user)} [png]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=1024)".format(user)} [jpg]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.jpg?size=1024)".format(user)} [webp]({"https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.webp?size=1024)".format(user)}', inline=False)
@@ -96,11 +92,9 @@ class General(commands.Cog):
             joined = f"User not in {ctx.guild.name}."
         
         async with aiohttp.ClientSession() as client:
-            async with client.get(URL(str("https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=16".format(user)))) as img:
+            async with client.get(URL(str("https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png".format(user)))) as img:
                 image_bytes = io.BytesIO(await img.read())
-                cf = ColorThief(image_bytes)
-                dc = cf.get_color(quality=1)
-                rgb = dc
+                rgb = fast_colorthief.get_dominant_color(image_bytes, quality=1)
                 color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
                 embed=discord.Embed(title="User Info", description=f"{user.mention} ({user.id})", color=color)
                 embed.add_field(name="Created On", value=user.created_at.strftime("%B %d, %Y"), inline=True)
@@ -131,9 +125,7 @@ class General(commands.Cog):
                     async with aiohttp.ClientSession() as client:
                         async with client.get(URL(str(image))) as img:
                             image_bytes = io.BytesIO(await img.read())
-                            cf = ColorThief(image_bytes)
-                            dc = cf.get_color(quality=1)
-                            rgb = dc
+                            rgb = fast_colorthief.get_dominant_color(image_bytes, quality=1)
                             color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
                             embed = discord.Embed(color=color)
                             embed.set_image(url=image)
@@ -150,28 +142,42 @@ class General(commands.Cog):
                     async with aiohttp.ClientSession() as client:
                         async with client.get(URL(str(image))) as img:
                             image_bytes = io.BytesIO(await img.read())
-                            cf = ColorThief(image_bytes)
-                            dc = cf.get_color(quality=1)
-                            rgb = dc
+                            rgb = fast_colorthief.get_dominant_color(image_bytes, quality=1)
                             color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
                             embed = discord.Embed(color=color)
                             embed.set_image(url=image)
                             await ctx.send(embed=embed)
 
+    #@commands.command(name="cat", aliases=['peepee'])
+    #@commands.guild_only()
+    #async def cat(self, ctx):
+    #    photonumber = randint(1, 947)
+    #    async with aiohttp.ClientSession() as client:
+    #        async with client.get(URL(str(f"https://assets.stkc.win/botpeepee/{photonumber}.jpg"))) as img:
+    #            image_bytes = io.BytesIO(await img.read())
+    #            cf = ColorThief(image_bytes)
+    #            dc = cf.get_color(quality=1)
+    #            rgb = dc
+    #            color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
+    #            embed = discord.Embed(color=color)
+    #            embed.set_image(url=f"https://assets.stkc.win/botpeepee/{photonumber}.jpg")
+    #            await ctx.send(embed=embed)
+
     @commands.command(name="cat", aliases=['peepee'])
     @commands.guild_only()
     async def cat(self, ctx):
-        photonumber = randint(1, 947)
-        async with aiohttp.ClientSession() as client:
-            async with client.get(URL(str(f"https://assets.stkc.win/botpeepee/{photonumber}.jpg"))) as img:
-                image_bytes = io.BytesIO(await img.read())
-                cf = ColorThief(image_bytes)
-                dc = cf.get_color(quality=1)
-                rgb = dc
-                color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
-                embed = discord.Embed(color=color)
-                embed.set_image(url=f"https://assets.stkc.win/botpeepee/{photonumber}.jpg")
-                await ctx.send(embed=embed)
+        try:
+            photonumber = randint(1, 947)
+            async with aiohttp.ClientSession() as client:
+                async with client.get(URL(str(f"https://assets.stkc.win/botpeepee/{photonumber}.jpg"))) as img:
+                    image_bytes = io.BytesIO(await img.read())
+                    rgb = fast_colorthief.get_dominant_color(image_bytes, quality=1)
+                    color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
+                    embed = discord.Embed(color=color)
+                    embed.set_image(url=f"https://assets.stkc.win/botpeepee/{photonumber}.jpg")
+                    await ctx.send(embed=embed)
+        except Exception as e:
+            await ctx.send(e)
 
 def setup(bot):
     bot.add_cog(General(bot))

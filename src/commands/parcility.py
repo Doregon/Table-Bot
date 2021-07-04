@@ -9,7 +9,7 @@ import urllib
 from datetime import datetime
 from discord.ext import commands, menus
 from yarl import URL
-from colorthief import ColorThief
+import fast_colorthief
 
 package_url = 'https://api.parcility.co/db/package/'
 search_url = 'https://api.parcility.co/db/search?q='
@@ -57,10 +57,8 @@ class TweakMenu(menus.AsyncIteratorPageSource):
                 async with client.get(URL(entry.get('Icon'))) as img:
                     if img.status == 200:
                         image_bytes = io.BytesIO(await img.read())
-                        cf = ColorThief(image_bytes)
-                        dc = cf.get_color(quality=1)
-                        rgb = dc
-                        color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16)
+                        rgb = fast_colorthief.get_dominant_color(image_bytes, quality=1)
+                        color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
                     else:
                         color = discord.Color.blue()
         else:
@@ -180,10 +178,8 @@ class Parcility(commands.Cog):
                 async with client.get(URL(data.get('Icon'))) as img:
                     if img.status == 200:
                         image_bytes = io.BytesIO(await img.read())
-                        cf = ColorThief(image_bytes)
-                        dc = cf.get_color(quality=1)
-                        rgb = dc
-                        color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16)
+                        rgb = fast_colorthief.get_dominant_color(image_bytes, quality=1)
+                        color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
                     else:
                         color = discord.Color.blue()
         else:
