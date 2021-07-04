@@ -13,7 +13,23 @@ async def packages(query):
                 data = response.get('data')
     pages = []
     for object in data:
-        embed = discord.Embed(color=discord.Color.blue())
+        pattern = re.compile(r"((http|https)\:\/\/)[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
+        if (pattern.match(object['Icon'])):
+            async with aiohttp.ClientSession() as client:
+                try:
+                    async with client.get(URL(object['Icon'])) as img:
+                        if img.status == 200:
+                            image_bytes = io.BytesIO(await img.read())
+                            rgb = fast_colorthief.get_dominant_color(image_bytes, quality=1)
+                            color = int(f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}', 16) 
+                        else:
+                            color = discord.Color.blue()
+                except Exception:
+                    color = discord.Color.blue()
+                    pass
+        else:
+            color = discord.Color.blue()
+        embed = discord.Embed(color=color)
         async with aiohttp.ClientSession() as client:
             async with client.get(URL(f'https://api.parcility.co/db/package/{object["Package"]}', encoded=True)) as resp:
                 if resp.status == 200:
