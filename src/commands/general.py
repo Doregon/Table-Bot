@@ -17,10 +17,10 @@ class General(commands.Cog):
     @commands.guild_only()
     async def help(self, ctx):
         embed=discord.Embed(title="Help", color=discord.Color.green())
-        embed.add_field(name="Parcility", value="`!package <query>`\n`!repo <query>`", inline=False)
-        embed.add_field(name="IPSW Downloads", value="`!firmware <device>`", inline=False)
-        embed.add_field(name="General", value="`!jumbo <emoji>`\n`!userinfo [user]`\n`!pfp [user]`\n`!ping`\n`!cat`\n`!catgirl`\n`!catboy`", inline=False)
-        embed.add_field(name="Moderation", value="`!purge <amount>`\n`!kick <user>`\n`!ban <user>`\n`!unban <id>`", inline=False)
+        embed.add_field(name="Parcility", value="`!package <query: package name>`\n`!repo <query: repo name>`", inline=False)
+        embed.add_field(name="IPSW Downloads", value="`!firmware <device: id or name>`", inline=False)
+        embed.add_field(name="General", value="`!jumbo <emoji: mention>`\n`!userinfo [user: mention/id]`\n`!pfp [user: mention/id]`\n`!ping`\n`!cat`\n`!catgirl`\n`!catboy`", inline=False)
+        embed.add_field(name="Moderation", value="`!purge <amount: integer>`\n`!kick <user: mention/id>`\n`!ban <user: mention/id>`\n`!unban <user: id>`", inline=False)
         embed.add_field(name="GitHub", value='https://github.com/xstecky/Table-Bot', inline=False)
         embed.add_field(name="Discord", value='https://diatr.us/discord', inline=False)
 
