@@ -18,11 +18,14 @@ async def get_pages(query):
                     response = json.loads(await resp.text())
     pages = []
     signed = ""
+    color = None
     for object in response['firmwares']:
         if object['signed'] == True:
             signed = '```diff\n+ This firmware is currently being signed and can be used to restore or update.\n```'
+            color = discord.Color.green()
         if object['signed'] == False:
             signed = '```diff\n- This firmware is not being signed and can not be used to restore or update.\n```'
+            color = discord.Color.red()
         if object['releasedate'] == None:
             releasedate = 'Unknown'
         else:
@@ -31,7 +34,7 @@ async def get_pages(query):
             sha1sum = 'Unknown'
         else:
             sha1sum = object['sha1sum']
-        embed = discord.Embed(color=discord.Color.blue())
+        embed = discord.Embed(color=color)
         embed.title = f"{object['version']} `{object['buildid']}`"
         embed.set_author(name=response['name'])
         embed.add_field(name="Released on", value=f"`{releasedate}`", inline=True)
