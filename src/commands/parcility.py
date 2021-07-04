@@ -47,9 +47,9 @@ async def packages(query):
             embed.add_field(name="Repo", value=f"[{object['repo']['label']}]({discord.utils.escape_markdown(object['repo']['url'])})" or "Unknown", inline=True)
             embed.add_field(name="Add Repo", value=f"[Click Here](https://sharerepo.stkc.win/?repo={discord.utils.escape_markdown(object['repo']['url'])})", inline=True)
             embed.add_field(name="More Info", value=f"[View Depiction]({discord.utils.escape_markdown(object['Depiction']).replace(' ','%20')})", inline=False)
-            embed.set_thumbnail(url=object['Icon'])
         except Exception as e:
             print(e)
+        embed.set_thumbnail(url=object['Icon'])
         embed.description = f"```\n{discord.utils.escape_markdown(object['Description'])}\n```"
         async with aiohttp.ClientSession() as client:
             async with client.get(URL(f'https://api.parcility.co/db/package/{object["Package"]}/sileo', encoded=True)) as resp:
