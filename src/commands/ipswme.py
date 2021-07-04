@@ -52,7 +52,7 @@ class ipswme(commands.Cog):
             await paginator.start(ctx)
         except UnboundLocalError:
             embed = discord.Embed(title="Not Found", color=discord.Color.red())
-            embed.description = f'Sorry, I couldn\'t find a matching device by that name. You can You can find these on <https://ipsw.me>.'
+            embed.description = f'Sorry, I couldn\'t find a matching device by that name. You can find these on [ipsw.me](https://ipsw.me/).'
             await ctx.message.delete(delay=15)
             await ctx.send(embed=embed, delete_after=15)
 
