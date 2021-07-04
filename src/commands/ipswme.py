@@ -17,8 +17,6 @@ async def get_pages(query):
                 if resp.status == 200:
                     response = json.loads(await resp.text())
     pages = []
-    signed = ""
-    color = None
     for object in response['firmwares']:
         if object['signed'] == True:
             signed = '```diff\n+ This firmware is currently being signed and can be used to restore or update.\n```'
@@ -56,7 +54,7 @@ class ipswme(commands.Cog):
             await paginator.start(ctx)
         except UnboundLocalError:
             embed = discord.Embed(title="Not Found", color=discord.Color.red())
-            embed.description = f'Sorry, I couldn\'t find a matching device by that name. You can find these on https://ipsw.me/.'
+            embed.description = f'Sorry, I couldn\'t find a matching device by that name. Please send a valid device identifier or name as seen on https://ipsw.me/.'
             await ctx.message.delete(delay=15)
             await ctx.send(embed=embed, delete_after=15)
 
