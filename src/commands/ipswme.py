@@ -37,7 +37,7 @@ async def get_pages(query):
         embed.title = f"{object['version']} `{object['buildid']}`"
         embed.add_field(name="Released on", value=f"`{releasedate}`", inline=True)
         embed.add_field(name="SHA1", value=f"`{sha1sum}`", inline=True)
-        embed.add_field(name="Download", value=f"[{object['url'][:30]}...]({object['url']}) `{size(object['filesize'], system = alternative)}`", inline=False)
+        embed.add_field(name="Download", value=f"[IPSW]({object['url']}) `{size(object['filesize'], system = alternative)}`", inline=False)
         embed.description = signed
         embed.set_footer(text=object['identifier'])
         pages.append(embed)
