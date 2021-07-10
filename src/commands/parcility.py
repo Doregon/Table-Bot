@@ -66,7 +66,16 @@ class TweakMenu(menus.AsyncIteratorPageSource):
         if entry.get('Price') != None:
             embed = discord.Embed(title=f"{entry.get('Name')} `{entry.get('Price')}`", color=color)
         else:
-            embed = discord.Embed(title=f"{entry.get('Name')} `{entry.get('Version')}`", color=color)
+            try:
+                async with aiohttp.ClientSession() as client:
+                        async with client.get(URL(f"{entry.get('repo').get('url')}{entry.get('builds')[-1].get('Filename')}")) as deb:
+                            if deb.status != 200 and 'repo.dynastic.co' not in entry.get('repo').get('url'):
+                                offline = "\n**⚠️ This package is unavailable and cannot be downloaded.**"
+                            else:
+                                offline = ""
+            except:
+                offline = ""
+            embed = discord.Embed(title=f"{entry.get('Name')} `{entry.get('Version')}`{offline}", color=color)
         embed.set_author(name=entry.get('Author') if entry.get('Author') else "Unknown")
         embed.description = f"```\n{discord.utils.escape_markdown(entry.get('Description'))}\n```"
         embed.add_field(name="Repo", value=f"[{entry.get('repo').get('label')}]({entry.get('repo').get('url')})" or "Unknown", inline=True)
