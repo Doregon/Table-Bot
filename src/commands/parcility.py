@@ -152,7 +152,8 @@ class Parcility(commands.Cog):
             return
 
         ctx = await self.bot.get_context(message)
-        response = await search_request(search_term)
+        async with ctx.typing():
+            response = await search_request(search_term)
         
         if response is None:
             embed = discord.Embed(title="Error", color=discord.Color.red())
@@ -173,23 +174,24 @@ class Parcility(commands.Cog):
     @commands.command(name="package", aliases=['pkg'])
     @commands.guild_only()
     async def package(self, ctx, *, query):
-        response = await search_request(query)
+        async with ctx.typing():
+            response = await search_request(query)
+            
+            if response is None:
+                embed = discord.Embed(title="Error", color=discord.Color.red())
+                embed.description = f'An error occurred while searching for that tweak.'
+                await ctx.message.delete(delay=15)
+                await ctx.send(embed=embed, delete_after=15)
+                return
+            elif len(response) == 0:
+                embed = discord.Embed(title="Not Found", color=discord.Color.red())
+                embed.description = f'Sorry, I couldn\'t find any tweaks with that name.'
+                await ctx.message.delete(delay=15)
+                await ctx.send(embed=embed, delete_after=15)
+                return
         
-        if response is None:
-            embed = discord.Embed(title="Error", color=discord.Color.red())
-            embed.description = f'An error occurred while searching for that tweak.'
-            await ctx.message.delete(delay=15)
-            await ctx.send(embed=embed, delete_after=15)
-            return
-        elif len(response) == 0:
-            embed = discord.Embed(title="Not Found", color=discord.Color.red())
-            embed.description = f'Sorry, I couldn\'t find any tweaks with that name.'
-            await ctx.message.delete(delay=15)
-            await ctx.send(embed=embed, delete_after=15)
-            return
-       
-        menu = MenuPages(source=TweakMenu(aiter(response), len(response)), clear_reactions_after=True)
-        await menu.start(ctx)
+            menu = MenuPages(source=TweakMenu(aiter(response), len(response)), clear_reactions_after=True)
+            await menu.start(ctx)
 
     @commands.command(name="repo")
     @commands.guild_only()

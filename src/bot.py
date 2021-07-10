@@ -36,6 +36,7 @@ def get_prefix(bot, message):
 # Think of it like a dot path import
 initial_extensions = ['commands.parcility',
                       'commands.ipswme',
+                      'commands.brew',
                       'commands.general',
                       'commands.moderation',
                       'utils.status',
