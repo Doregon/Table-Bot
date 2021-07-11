@@ -8,6 +8,13 @@ Bot for the Procursus Discord server.
 
 * ### !package
 * ### !repo
+* ### "[[package]]"
+
+## Homebrew 
+
+* ### !brew
+* ### !cask
+* ### "{{package}}" (also searches Casks)
 
 ## IPSW Downloads
 
