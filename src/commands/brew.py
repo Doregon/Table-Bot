@@ -11,14 +11,35 @@ async def get_pages(query):
     pages = []
     for object in response:
         try:
-            if query not in object['name']:
+            if query.lower() not in object['name']:
                 continue
             embed = discord.Embed(color=discord.Color.blue())
-            #embed.set_author(name=response['name'])
+            embed.set_author(name=object['tap'])
             embed.title = f"{object['name']} `{object['versions']['stable']}`"
             embed.description = f"```\n{discord.utils.escape_markdown(object['desc'])}\n```"
             embed.add_field(name="Homepage", value=f"{object['homepage']}", inline=True)
             embed.add_field(name="License", value=f"{object['license']}", inline=True)
+            pages.append(embed)
+        except Exception as e:
+            await print(e)
+    return pages
+
+async def get_pages_cask(query):
+    async with aiohttp.ClientSession() as client:
+        async with client.get(URL(f'https://formulae.brew.sh/api/cask.json', encoded=True)) as resp:
+            if resp.status == 200:
+                response = json.loads(await resp.text())
+    pages = []
+    for object in response:
+        try:
+            if query.lower() not in object['token']:
+                continue
+            embed = discord.Embed(color=discord.Color.blue())
+            embed.set_author(name=object['tap'])
+            embed.title = f"{object['name'][-1]} `{object['version']}`"
+            embed.description = f"```\n{object['desc']}\n```"
+            embed.add_field(name="Homepage", value=f"{object['homepage']}", inline=True)
+            #embed.add_field(name="License", value=f"{object['license']}", inline=True)
             pages.append(embed)
         except Exception as e:
             await print(e)
@@ -49,10 +70,14 @@ class brew(commands.Cog):
                 paginator = Paginator(pages = await get_pages(search_term), has_input = False)
                 await paginator.start(ctx)
         except Exception:
-            embed = discord.Embed(title="Not Found", color=discord.Color.red())
-            embed.description = f'Sorry, I couldn\'t find any matching packages by that name.'
-            await ctx.message.delete(delay=15)
-            await ctx.send(embed=embed, delete_after=15)
+            try:
+                paginator = Paginator(pages = await get_pages_cask(search_term), has_input = False)
+                await paginator.start(ctx)
+            except:
+                embed = discord.Embed(title="Not Found", color=discord.Color.red())
+                embed.description = f'Sorry, I couldn\'t find any matching packages by that name.'
+                await ctx.message.delete(delay=15)
+                await ctx.send(embed=embed, delete_after=15)
 
     @commands.command(name='brew')
     async def brew(self, ctx, *, query):
@@ -60,9 +85,21 @@ class brew(commands.Cog):
             try:
                 paginator = Paginator(pages = await get_pages(query), has_input = False)
                 await paginator.start(ctx)
-            except UnboundLocalError:
+            except Exception:
                 embed = discord.Embed(title="Not Found", color=discord.Color.red())
-                embed.description = f'orry, I couldn\'t find any matching packages by that name.'
+                embed.description = f'Sorry, I couldn\'t find any matching packages by that name.'
+                await ctx.message.delete(delay=15)
+                await ctx.send(embed=embed, delete_after=15)
+
+    @commands.command(name='brewcask', aliases=['cask'])
+    async def brewcask(self, ctx, *, query):
+        async with ctx.typing():
+            try:
+                paginator = Paginator(pages = await get_pages_cask(query), has_input = False)
+                await paginator.start(ctx)
+            except Exception:
+                embed = discord.Embed(title="Not Found", color=discord.Color.red())
+                embed.description = f'Sorry, I couldn\'t find any matching packages by that name.'
                 await ctx.message.delete(delay=15)
                 await ctx.send(embed=embed, delete_after=15)
 

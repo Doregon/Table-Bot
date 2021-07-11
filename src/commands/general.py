@@ -18,8 +18,8 @@ class General(commands.Cog):
     async def help(self, ctx):
         dm = ctx.author
         embed=discord.Embed(title="Help", color=discord.Color.green())
-        embed.add_field(name="Parcility", value="`!package <query: package name>`\n`!repo <query: repo name>`", inline=False)
-        embed.add_field(name="Homebrew", value="`!brew <query: package name>`", inline=False)
+        embed.add_field(name="Parcility", value="`[[query: package]]`\n`!package <query: package>`\n`!repo <query: repo>`", inline=False)
+        embed.add_field(name="Homebrew", value="`{{query: package/application}}`\n`!brew <query: package>`\n`!cask <query: application>`", inline=False)
         embed.add_field(name="IPSW Downloads", value="`!firmware <device: identifier/name>`", inline=False)
         embed.add_field(name="General", value="`!jumbo <emoji: mention>`\n`!userinfo [user: mention/id]`\n`!pfp [user: mention/id]`\n`!ping`\n`!cat`\n`!catgirl`\n`!catboy`", inline=False)
         embed.add_field(name="Moderation", value="`!purge <amount: integer>`\n`!kick <user: mention/id>`\n`!ban <user: mention/id>`\n`!unban <user: id>`", inline=False)
