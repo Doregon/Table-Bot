@@ -86,7 +86,8 @@ class TweakMenu(menus.AsyncIteratorPageSource):
         if entry.get('Depends') != None:
             embed.add_field(name="Dependencies", value=f"```xml\n{entry.get('Depends')}```\n", inline=False)
         if entry.get('builds')[-1].get('Filename') != None and entry.get('Price') == None and entry.get('repo').get('url').__contains__('repounclutter.coolstar.org') == False:
-            embed.add_field(name="Download", value=f"[Debian Package]({entry.get('repo').get('url')}{entry.get('builds')[-1].get('Filename')})", inline=False)
+            embed.add_field(name="Download", value=f"[Debian Package](https://parcility.co/dl/{entry.get('repo').get('slug')}/{entry.get('Package')}/{entry.get('Version')})", inline=False)
+            # {entry.get('repo').get('url')}{entry.get('builds')[-1].get('Filename')}
         if (pattern.match(entry.get('Icon'))):
             embed.set_thumbnail(url=entry.get('Icon'))
         async with aiohttp.ClientSession() as client:
@@ -226,7 +227,7 @@ class Parcility(commands.Cog):
         embed = discord.Embed(title=data.get('Label'), color=color)
         embed.set_author(name=f"{data.get('package_count')} packages, {data.get('section_count')} sections")
         embed.description = f"```\n{discord.utils.escape_markdown(data.get('Description'))}\n```"
-        embed.add_field(name="URL", value=f"{data.get('url')}" or f"{data.get('url')}", inline=True)
+        embed.add_field(name="URL", value=data.get('url'), inline=True)
         if data.get('isDefault') == False:
             embed.add_field(name="Add Repo", value=f'[Click Here](https://sharerepo.stkc.win/?repo={data.get("url")})', inline=True)
         if (pattern.match(data.get('Icon'))):
