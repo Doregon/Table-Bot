@@ -61,7 +61,7 @@ devices = {
     'ipad mini 2nd gen': 'iPad4,4',
     'ipad mini 3rd gen': 'iPad4,7',
     'ipad mini 4th gen': 'iPad5,1',
-    'ipad mini 5th gen'; 'iPad11,1',
+    'ipad mini 5th gen': 'iPad11,1',
     'ipad air': 'iPad4,1',
     'ipad air 2nd gen': 'iPad5,3',
     'ipad air 3rd gen': 'iPad11,3',
