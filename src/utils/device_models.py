@@ -30,7 +30,7 @@ devices = {
     'iphone 11 pro max': 'iPhone12,5',
     'iphone se 2': 'iPhone12,8',
     'iphone 12 mini': 'iPhone13,1',
-    'iphone 12': 'iPhone13,2'
+    'iphone 12': 'iPhone13,2',
     'iphone 12 pro': 'iPhone13,3',
     'iphone 12 pro max': 'iPhone13,4',
     'ipod touch': 'iPod1,1',
