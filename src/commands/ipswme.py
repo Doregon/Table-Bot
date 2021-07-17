@@ -22,7 +22,7 @@ async def get_pages(query):
             signed = '```diff\n+ This firmware is currently being signed and can be used to restore or update.\n```'
             color = discord.Color.green()
         if object['signed'] == False:
-            signed = '```diff\n- This firmware is not being signed and can not be used to restore or update.\n```'
+            signed = '```diff\n- This firmware is not being signed and can not be used to restore or update without blobs.\n```'
             color = discord.Color.red()
         if object['releasedate'] == None:
             releasedate = 'Unknown'
