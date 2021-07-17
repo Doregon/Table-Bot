@@ -65,7 +65,7 @@ devices = {
     'ipad air': 'iPad4,1',
     'ipad air 2nd gen': 'iPad5,3',
     'ipad air 3rd gen': 'iPad11,3',
-    'ipad air 4th gen': 'iPad13,1',,
+    'ipad air 4th gen': 'iPad13,1',
     'ipad pro 12.9': 'iPad6,7',
     'ipad pro 9.7': 'iPad6,3',
     'ipad pro 10.5': 'iPad7,3',
