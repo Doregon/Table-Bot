@@ -13,7 +13,7 @@ devices = {
     'iphone 6s+': 'iPhone8,2',
     'iphone se': 'iPhone8,4',
     'iphone 7': 'iPhone9,1',
-    'iphone 7 plus': 'iPhone9,2',
+    'iphone 7 plus': 'iPhone9,4',
     'iphone 8': 'iPhone10,1',
     'iphone 8 plus (gsm)': 'iPhone10,5',
     'iphone x': 'iPhone10,3',
